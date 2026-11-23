@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingredient Matcher - FoodMood</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f6fc;
+            color: #26364a;
+        }
+
+        header {
+            background: #163b68;
+            color: white;
+            padding: 20px 8%;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            color: #2166ad;
+            margin-bottom: 12px;
+        }
+
+        .page-title p {
+            color: #63758b;
+            line-height: 1.6;
+        }
+
+        .form-card, .result-card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(22, 59, 104, 0.07);
+            margin-bottom: 22px;
+            border: 1px solid #e0eaf5;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #163b68;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccd9e8;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2878c7;
+        }
+
+        .hint {
+            color: #8291a3;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        button {
+            background: #2878c7;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #163b68;
+        }
+
+        .result-title {
+            color: #2166ad;
+            margin-bottom: 20px;
+        }
+
+        .result-card h3 {
+            color: #163b68;
+            margin-bottom: 10px;
+        }
+
+        .category {
+            display: inline-block;
+            background: #e2edf8;
+            color: #2166ad;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .percentage {
+            font-weight: bold;
+            color: #2166ad;
+            margin: 12px 0;
+        }
+
+        .detail {
+            font-size: 14px;
+            color: #63758b;
+            line-height: 1.8;
+        }
+
+        .empty {
+            text-align: center;
+            color: #63758b;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            color: #63758b;
+            background: #e2edf8;
+            margin-top: 50px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .form-card, .result-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/">← Kembali ke FoodMood</a>
+</header>
+
+<div class="container">
+
+    <div class="page-title">
+        <h1>🥕 Ingredient Matcher</h1>
+        <p>
+            Masukkan bahan makanan yang tersedia dan temukan
+            resep yang paling sesuai dengan bahan tersebut.
+        </p>
+    </div>
+
+    <div class="form-card">
+        <form method="POST">
+
+            <label for="ingredients">Bahan makanan yang tersedia</label>
+
+            <textarea
+                id="ingredients"
+                name="ingredients"
+                placeholder="Contoh: Chicken, Garlic, Potatoes, Milk"
+                required>{{ ingredients }}</textarea>
+
+            <p class="hint">
+                Pisahkan setiap bahan menggunakan tanda koma (,).
+            </p>
+
+            <button type="submit">Cari Rekomendasi Resep</button>
+
+        </form>
+    </div>
+
+    {% if results %}
+        <h2 class="result-title">Hasil Rekomendasi Resep</h2>
+
+        {% for recipe in results %}
+            <div class="result-card">
+
+                <h3>{{ loop.index }}. {{ recipe.name }}</h3>
+
+                <span class="category">{{ recipe.category }}</span>
+
+                <p class="percentage">
+                    Kecocokan: {{ "%.2f"|format(recipe.match_percentage) }}%
+                </p>
+
+                <div class="detail">
+                    <p>
+                        <strong>Bahan cocok:</strong>
+                        {{ recipe.matched_count }} dari
+                        {{ recipe.total_ingredients }}
+                    </p>
+
+                    <p>
+                        <strong>Bahan tersedia:</strong>
+                        {{ recipe.matched_ingredients|join(", ") }}
+                    </p>
+
+                    <p>
+                        <strong>Bahan belum tersedia:</strong>
+                        {% if recipe.missing_ingredients %}
+                            {{ recipe.missing_ingredients|join(", ") }}
+                        {% else %}
+                            Semua bahan tersedia!
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+        {% endfor %}
+
+    {% elif request.method == "POST" %}
+        <div class="empty">
+            Belum ditemukan resep yang sesuai dengan bahan tersebut.
+            Coba masukkan bahan makanan lainnya.
+        </div>
+    {% endif %}
+
+</div>
+
+<footer>
+    FoodMood &copy; 2026 | Ingredient Matcher
+</footer>
+
+</body>
+</html>

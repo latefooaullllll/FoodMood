@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Leftover - FoodMood</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f6fc;
+            color: #263445;
+        }
+
+        header {
+            background: #163b68;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2166ad;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
+        }
+
+        .form-card h2 {
+            color: #2166ad;
+            margin-bottom: 12px;
+        }
+
+        .form-card p {
+            color: #65758b;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd8e8;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 18px;
+            padding: 13px 24px;
+            background: #2878c7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d5f9f;
+        }
+
+        .result-heading {
+            color: #2166ad;
+            margin-bottom: 18px;
+        }
+
+        .result-info {
+            background: #e4effb;
+            padding: 15px 18px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .recipe-content {
+            padding: 18px;
+        }
+
+        .recipe-content h3 {
+            color: #2166ad;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .recipe-content p {
+            color: #65758b;
+            font-size: 14px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .percentage {
+            margin-top: 14px;
+            padding: 12px;
+            background: #e4effb;
+            border-radius: 8px;
+            color: #2166ad;
+            font-weight: bold;
+            line-height: 1.7;
+        }
+
+        .ingredient-list {
+            margin-top: 14px;
+        }
+
+        .ingredient-list h4 {
+            color: #263445;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .ingredient-list ul {
+            padding-left: 20px;
+            color: #65758b;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            color: #65758b;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🍽️ FoodMood</h1>
+    </header>
+
+    <main class="container">
+
+        <a href="/" class="back-link">
+            ← Kembali ke Beranda
+        </a>
+
+        <section class="form-card">
+            <h2>🥕 Smart Leftover</h2>
+
+            <p>
+                Manfaatkan bahan makanan yang masih tersisa di rumah.
+                Masukkan bahan yang tersedia dan FoodMood akan
+                merekomendasikan resep yang dapat dibuat.
+            </p>
+
+            <form method="POST">
+                <label for="leftovers">
+                    Masukkan bahan makanan yang tersedia
+                </label>
+
+                <input
+                    type="text"
+                    name="leftovers"
+                    id="leftovers"
+                    placeholder="Contoh: Ayam, Kentang, Wortel, Telur"
+                    value="{{ leftovers }}"
+                    required
+                >
+
+                <button type="submit">
+                    Cari Rekomendasi Resep
+                </button>
+            </form>
+        </section>
+
+        {% if leftovers %}
+            <h2 class="result-heading">
+                Hasil Rekomendasi Resep
+            </h2>
+
+            <div class="result-info">
+                Bahan yang tersedia:
+                <strong>{{ leftovers }}</strong>
+                <br>
+
+                Jumlah resep ditemukan:
+                <strong>{{ results|length }}</strong>
+            </div>
+
+            {% if results %}
+                <div class="recipe-grid">
+
+                    {% for recipe in results %}
+                        <article class="recipe-card">
+
+                            {% if recipe.image_url %}
+                                <img
+                                    src="{{ recipe.image_url }}"
+                                    alt="{{ recipe.name }}"
+                                    loading="lazy"
+                                >
+                            {% endif %}
+
+                            <div class="recipe-content">
+
+                                <h3>{{ recipe.name }}</h3>
+
+                                <p>
+                                    <strong>Kategori:</strong>
+                                    {{ recipe.category }}
+                                </p>
+
+                                <p>
+                                    <strong>Asal:</strong>
+                                    {{ recipe.area or 'Tidak diketahui' }}
+                                </p>
+
+                                <div class="percentage">
+                                    Bahan sisa dimanfaatkan:
+                                    {{ recipe.used_count }}
+                                    dari
+                                    {{ recipe.total_leftovers }}
+                                    <br>
+
+                                    Persentase pemanfaatan:
+                                    {{ recipe.utilization_percentage }}%
+                                    <br>
+
+                                    Kecocokan bahan resep:
+                                    {{ recipe.match_percentage }}%
+                                </div>
+
+                                <div class="ingredient-list">
+                                    <h4>Bahan sisa yang digunakan:</h4>
+
+                                    <ul>
+                                        {% for ingredient in recipe.used_ingredients %}
+                                            <li>{{ ingredient }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <div class="ingredient-list">
+                                    <h4>Bahan sisa yang belum digunakan:</h4>
+
+                                    {% if recipe.unused_leftovers %}
+                                        <ul>
+                                            {% for ingredient in recipe.unused_leftovers %}
+                                                <li>{{ ingredient }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p>Semua bahan sisa berhasil dimanfaatkan.</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="ingredient-list">
+                                    <h4>Bahan resep yang masih dibutuhkan:</h4>
+
+                                    {% if recipe.missing_ingredients %}
+                                        <ul>
+                                            {% for ingredient in recipe.missing_ingredients %}
+                                                <li>{{ ingredient }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p>Semua bahan resep sudah tersedia.</p>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </article>
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+                <div class="empty-message">
+                    Belum ditemukan resep yang sesuai dengan bahan tersebut.
+                    Silakan masukkan bahan lainnya.
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </main>
+
+    <footer>
+        FoodMood - Rekomendasi Resep Makanan
+    </footer>
+
+</body>
+</html>

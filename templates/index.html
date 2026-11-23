@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodMood - Rekomendasi Resep</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f6fc;
+            color: #26364a;
+        }
+
+        header {
+            background: #163b68;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 65px 20px 45px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            color: #2166ad;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #63758b;
+            line-height: 1.7;
+        }
+
+        .features {
+            max-width: 1100px;
+            margin: 10px auto 60px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(22, 59, 104, 0.07);
+            border: 1px solid #e0eaf5;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(22, 59, 104, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #2166ad;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #63758b;
+            line-height: 1.6;
+            font-size: 14px;
+            min-height: 45px;
+        }
+
+        .feature-card a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 18px;
+            background: #2878c7;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .feature-card a:hover {
+            background: #163b68;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            background: #e2edf8;
+            color: #63758b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            header {
+                padding: 18px 6%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">🍽️ FoodMood</div>
+        <div>Smart Recipe Recommendation</div>
+    </header>
+
+    <section class="hero">
+        <h1>Masak Apa Hari Ini?</h1>
+        <p>
+            Temukan inspirasi makanan berdasarkan bahan yang kamu punya,
+            suasana hati, dan kebutuhan memasakmu.
+            <br>
+            Pilih fitur FoodMood dan temukan resep yang cocok!
+        </p>
+    </section>
+
+    <section class="features">
+
+        <div class="feature-card">
+            <div class="feature-icon">🥕</div>
+            <h3>Ingredient Matcher</h3>
+            <p>Temukan resep berdasarkan bahan makanan yang tersedia di rumah.</p>
+            <a href="/ingredient-matcher">Cari Resep</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">😊</div>
+            <h3>Mood-Based Recommendation</h3>
+            <p>Pilih suasana hati atau selera makanan untuk mendapatkan rekomendasi resep.</p>
+            <a href="/mood-recommendation">Pilih Mood</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🥬</div>
+            <h3>Smart Leftover</h3>
+            <p>Manfaatkan bahan makanan yang tersisa agar tidak terbuang sia-sia.</p>
+            <a href="/smart-leftover">Manfaatkan Sisa</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Recipe Rescue</h3>
+            <p>Temukan alternatif bahan ketika ada bahan resep yang tidak tersedia.</p>
+            <a href="/recipe-rescue">Cari Alternatif</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🎲</div>
+            <h3>Anti-Bosan Menu</h3>
+            <p>Dapatkan inspirasi resep yang bervariasi dan hindari pilihan yang baru dicoba.</p>
+            <a href="/anti-bosan">Cari Menu</a>
+        </div>
+
+    </section>
+
+    <footer>
+        FoodMood &copy; 2026 | Smart Recipe Recommendation System
+    </footer>
+
+</body>
+</html>

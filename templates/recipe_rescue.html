@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Rescue - FoodMood</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f6fc;
+            color: #333;
+        }
+
+        header {
+            background: #163b68;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        header h1 {
+            font-size: 27px;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: #dce9f8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #2166ad;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #2166ad;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 17px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccd6e2;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 13px 22px;
+            background: #2878c7;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d5f9e;
+        }
+
+        .result-title {
+            color: #2166ad;
+            margin-bottom: 18px;
+        }
+
+        .summary {
+            background: #f1f6fc;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 15px 0 22px;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-top: 22px;
+        }
+
+        .section h3 {
+            color: #2166ad;
+            margin-bottom: 12px;
+        }
+
+        .section ul {
+            padding-left: 22px;
+            line-height: 1.9;
+        }
+
+        .alternative {
+            background: #f7f9fc;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .not-found {
+            background: #fff4e5;
+            color: #865b18;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+
+            header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>FoodMood</h1>
+    <p>Penyelamat Resep - Temukan Bahan Pengganti</p>
+</header>
+
+<div class="container">
+
+    <a href="/" class="back-link">← Kembali ke Beranda</a>
+
+    <div class="card">
+        <h2>Penyelamat Resep</h2>
+
+        <p class="description">
+            Tidak memiliki semua bahan yang dibutuhkan untuk memasak?
+            Masukkan nama resep dan bahan yang tersedia untuk menemukan
+            alternatif bahan pengganti.
+        </p>
+
+        <form method="POST" action="/recipe-rescue">
+
+            <label for="recipe_name">Nama Resep</label>
+            <input
+                type="text"
+                id="recipe_name"
+                name="recipe_name"
+                placeholder="Contoh: Spanish chicken pie"
+                value="{{ recipe_name }}"
+                required
+            >
+
+            <label for="ingredients">Bahan yang Tersedia</label>
+            <input
+                type="text"
+                id="ingredients"
+                name="ingredients"
+                placeholder="Contoh: ayam, kentang, bawang bombai, bawang putih"
+                value="{{ ingredients }}"
+                required
+            >
+
+            <button type="submit">Cari Bahan Pengganti</button>
+
+        </form>
+    </div>
+
+    {% if result %}
+
+    <div class="card">
+
+        <h2 class="result-title">Hasil Analisis Resep</h2>
+
+        <h3>{{ result.name }}</h3>
+        <p>Kategori: {{ result.category }}</p>
+
+        <div class="summary">
+            <strong>Total bahan resep:</strong>
+            {{ result.total_ingredients }}<br>
+
+            <strong>Bahan yang tersedia:</strong>
+            {{ result.matched_ingredients|length }}<br>
+
+            <strong>Bahan yang belum tersedia:</strong>
+            {{ result.missing_ingredients|length }}
+        </div>
+
+        <div class="section">
+            <h3>✓ Bahan yang Tersedia</h3>
+
+            {% if result.matched_ingredients %}
+                <ul>
+                    {% for ingredient in result.matched_ingredients %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Belum ada bahan yang cocok.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h3>✗ Bahan yang Belum Tersedia</h3>
+
+            {% if result.missing_ingredients %}
+                <ul>
+                    {% for ingredient in result.missing_ingredients %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Semua bahan resep sudah tersedia!</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h3>💡 Rekomendasi Bahan Pengganti</h3>
+
+            {% if result.rescue_results %}
+                {% for item in result.rescue_results %}
+                    <div class="alternative">
+                        <strong>{{ item.ingredient }}</strong><br>
+
+                        {% if item.alternatives %}
+                            Alternatif:
+                            {{ item.alternatives|join(', ') }}
+                        {% else %}
+                            Alternatif belum tersedia.
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Tidak ada bahan yang perlu diganti.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% elif recipe_name and ingredients %}
+
+    <div class="not-found">
+        Resep tidak ditemukan. Periksa kembali nama resep yang dimasukkan.
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
